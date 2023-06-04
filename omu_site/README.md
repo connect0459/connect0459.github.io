@@ -9,6 +9,7 @@
 ## Resources
 ### composer
 SETUP内のzipファイルを`/assets/`配下に展開する。Google関連のファイルサイズが大きいため、展開するzipファイルの種類は次の2つから選択する。また、`assets/composer/composer.json`を以下に示すjsonに書き換える。
+
 * composer.zip: omuサイトに必要なgoogle-api-clientのみ残した縮小版。
 ```
 {
