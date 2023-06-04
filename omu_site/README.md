@@ -7,7 +7,8 @@
 ## インストール
 
 ## Resources
-SETUP内のzipファイルを/assets/配下に展開する。Google関連のファイルサイズが大きいため、展開するzipファイルの種類は次の2つから選択する。
+### composer
+SETUP内のzipファイルを`/assets/`配下に展開する。Google関連のファイルサイズが大きいため、展開するzipファイルの種類は次の2つから選択する。
 <br>
 `assets/composer/composer.json`を以下に示すjsonに書き換える。コマンドプロンプトでcomposerディレクトリまで移動し、`composer update`を入力することでパッケージのアップデートが可能。`"google/apiclient-services"`で指定する名称は、`composer-master.zip\composer\vendor\google\apiclient-services\src`のサービス一覧から確認できる。
 
