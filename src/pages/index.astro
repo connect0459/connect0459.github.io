@@ -8,6 +8,7 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { AUTHOR_LINKS, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { HOME_OG_IMAGE_PATH } from '../features/og-image/model';
 import { groupByYear, toTimelineEntry } from '../features/timeline/model';
 
 const articles = await getCollection('articles');
@@ -37,7 +38,11 @@ const yearGroups = groupByYear(entries);
 
 <html lang="ja">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead
+			title={SITE_TITLE}
+			description={SITE_DESCRIPTION}
+			ogImagePath={HOME_OG_IMAGE_PATH}
+		/>
 	</head>
 	<body>
 		<Header />
