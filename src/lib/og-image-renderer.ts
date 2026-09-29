@@ -13,8 +13,8 @@ const assetPath = (file: string) =>
 	path.resolve(process.cwd(), 'src/assets', file);
 
 const font = readFile(assetPath('fonts/NotoSansJP-Bold.otf'));
-const avatarSrc = readFile(assetPath('avatar.jpg')).then(
-	(avatar) => `data:image/jpeg;base64,${avatar.toString('base64')}`,
+const avatarSrc = readFile(assetPath('avatar.png')).then(
+	(avatar) => `data:image/png;base64,${avatar.toString('base64')}`,
 );
 
 export async function renderOgImage(card: {
