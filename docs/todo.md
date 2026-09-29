@@ -73,7 +73,7 @@ Package-by-features: new `src/features/timeline/` directory. Everything here is 
 - [x] Remove the starter sample posts (`first-post.md`, `second-post.md`, `third-post.md`, `markdown-style-guide.md`, `using-mdx.mdx`). Done ahead of schedule during Phase 4: `using-mdx.mdx` imported the now-deleted `HeaderLink.astro`, which broke `npm run build`; removing all five together (rather than patching one import) avoided keeping dead starter content around only to delete it again in this phase.
 - [x] ~~Write a local favicon fetch script~~ — superseded 2026-09-11: the timeline now fetches favicons live from Google's s2 service instead of committed local assets (see the decision above), so no fetch script is needed for now.
 - [ ] Add the real external cross-posts as `links` entries (title/url/pubDate only).
-- [ ] Author at least one real native article under `src/content/articles/` to validate the article layout end-to-end.
+- [x] Author at least one real native article under `src/content/articles/` to validate the article layout end-to-end.
 - [ ] Add a real avatar image for the home profile block, replacing the mockup's placeholder box.
 
 ## Phase 6: SEO/meta & feed
