@@ -9,7 +9,7 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
         args: ['--maxkb=1024']
-        exclude: '^src/assets/fonts/.*\.(woff|woff2)$'
+        exclude: '^src/assets/fonts/.*\.(woff|woff2|otf)$'
 
   - repo: local
     hooks:
