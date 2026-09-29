@@ -63,6 +63,22 @@ describe('buildOgImageNode', () => {
 		expect(collectTexts(buildOgImageNode(card))).toContain('2026-09-21');
 	});
 
+	it('drops emoji from the title because the bundled font cannot draw them', () => {
+		const texts = collectTexts(
+			buildOgImageNode({ ...card, title: '🍓 いちご 👨‍👩‍👧 アイス✨' }),
+		);
+
+		expect(texts).toContain('いちご アイス');
+	});
+
+	it('keeps ideographic and symbol characters the font can draw', () => {
+		const texts = collectTexts(
+			buildOgImageNode({ ...card, title: '𠮷野家 ㈱ v1.0 #tag' }),
+		);
+
+		expect(texts).toContain('𠮷野家 ㈱ v1.0 #tag');
+	});
+
 	it('omits the date for a card without a publication date', () => {
 		const homeCard = {
 			title: card.title,

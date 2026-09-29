@@ -26,6 +26,13 @@ export function ogImagePath(slug: string): string {
 	return `/og/${slug}.png`;
 }
 
+const UNDRAWABLE =
+	/\p{Extended_Pictographic}|\p{Regional_Indicator}|[\u{1F3FB}-\u{1F3FF}]|\u200D|\uFE0F/gu;
+
+function withoutEmoji(text: string): string {
+	return text.replace(UNDRAWABLE, '').replace(/\s+/g, ' ').trim();
+}
+
 export function buildOgImageNode(card: OgImageCard): OgImageNode {
 	return {
 		type: 'div',
@@ -52,7 +59,7 @@ export function buildOgImageNode(card: OgImageCard): OgImageNode {
 							lineHeight: 1.3,
 							lineClamp: 4,
 						},
-						children: card.title,
+						children: withoutEmoji(card.title),
 					},
 				},
 				{
