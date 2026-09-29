@@ -38,6 +38,6 @@ const { prev, next } = findAdjacentEntries(
 );
 ---
 
-<ArticleLayout {...post.data} prev={prev} next={next}>
+<ArticleLayout {...post.data} slug={post.id} prev={prev} next={next}>
 	<Content />
 </ArticleLayout>
