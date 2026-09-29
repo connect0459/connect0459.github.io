@@ -10,36 +10,38 @@ interface Props {
 const { links } = Astro.props;
 ---
 
-<section class="author-profile">
-	<Image
-		class="author-avatar"
-		src={avatar}
-		alt=""
-		width={96}
-		height={96}
-		aria-hidden="true"
-	/>
-	<div class="author-name">
-		{SITE_TITLE}
-		<span class="author-real-name">{AUTHOR_PROFILE.realName}</span>
-	</div>
-</section>
-{
-	AUTHOR_PROFILE.introduction.map((paragraph) => (
-		<p class="author-bio">{paragraph}</p>
-	))
-}
-{
-	links && (
-		<div class="author-social">
-			{links.map((link) => (
-				<a href={link.href} target="_blank" rel="noopener noreferrer">
-					{link.label} ↗
-				</a>
-			))}
+<div class="author">
+	<section class="author-profile">
+		<Image
+			class="author-avatar"
+			src={avatar}
+			alt=""
+			width={96}
+			height={96}
+			aria-hidden="true"
+		/>
+		<div class="author-name">
+			{SITE_TITLE}
+			<span class="author-real-name">{AUTHOR_PROFILE.realName}</span>
 		</div>
-	)
-}
+	</section>
+	{
+		AUTHOR_PROFILE.introduction.map((paragraph) => (
+			<p class="author-bio">{paragraph}</p>
+		))
+	}
+	{
+		links && (
+			<div class="author-social">
+				{links.map((link) => (
+					<a href={link.href} target="_blank" rel="noopener noreferrer">
+						{link.label} ↗
+					</a>
+				))}
+			</div>
+		)
+	}
+</div>
 <style>
 	.author-profile {
 		display: flex;
