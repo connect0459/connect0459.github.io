@@ -1,14 +1,11 @@
 ---
-import { formatFullDate, formatShortDate } from '../features/timeline/model';
+import { formatFullDate } from '../features/timeline/model';
 
 interface Props {
 	date: Date;
-	format?: 'full' | 'short';
 }
 
-const { date, format = 'full' } = Astro.props;
-const display =
-	format === 'short' ? formatShortDate(date) : formatFullDate(date);
+const { date } = Astro.props;
 ---
 
-<time datetime={date.toISOString()}>{display}</time>
+<time datetime={date.toISOString()}>{formatFullDate(date)}</time>
