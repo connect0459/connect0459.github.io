@@ -20,7 +20,7 @@ It is difficult to review without knowing the specifications and background.
 
 ## Scope of Change
 
-- [ ] Blog content (`src/content/blog/`)
+- [ ] Blog content (`src/content/articles/`)
 - [ ] Site code (pages / components / layouts / styles)
 - [ ] Tooling / CI
 - [ ] Documentation

@@ -11,14 +11,14 @@ This project may be released publicly. All of the following must be written in *
 - Documentation (including `AGENTS.md`, `README.md`, etc.)
 - Error messages
 
-Blog post content under `src/content/blog/` is exempt: posts may be written in any language.
+Blog post content under `src/content/articles/` is exempt: posts may be written in any language.
 
 ## Project Structure
 
-- `src/pages/` — file-based routing; each `.astro` file (or dynamic route like `blog/[...slug].astro`) becomes a page. `rss.xml.js` generates the RSS feed.
-- `src/content/blog/` — blog posts as Markdown (`.md`) or MDX (`.mdx`). Frontmatter is validated against the schema in `src/content.config.ts` (`title`, `description`, `pubDate` required; `updatedDate`, `heroImage` optional).
+- `src/pages/` — file-based routing; each `.astro` file (or dynamic route like `articles/[...slug].astro`) becomes a page. `rss.xml.js` generates the RSS feed.
+- `src/content/articles/` — blog posts as Markdown (`.md`) or MDX (`.mdx`). Frontmatter is validated against the schema in `src/content.config.ts` (`title`, `description`, `pubDate` required; `updatedDate`, `heroImage` optional).
 - `src/components/` — reusable `.astro` components (header, footer, meta tags, etc.).
-- `src/layouts/` — page layouts (e.g. `BlogPost.astro`).
+- `src/layouts/` — page layouts (e.g. `ArticleLayout.astro`).
 - `src/styles/` — global CSS.
 - `src/assets/` — images and fonts processed by Astro (hero images, local fonts).
 - `src/consts.ts` — site-wide constants (`SITE_TITLE`, `SITE_DESCRIPTION`).

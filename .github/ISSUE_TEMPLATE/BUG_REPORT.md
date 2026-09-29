@@ -7,7 +7,7 @@ about: Report a bug
 
 ## [Required] Affected Area
 
-- [ ] Blog content (`src/content/blog/`)
+- [ ] Blog content (`src/content/articles/`)
 - [ ] Site code (pages / components / layouts / styles)
 - [ ] Build / Tooling / CI
 - [ ] Other

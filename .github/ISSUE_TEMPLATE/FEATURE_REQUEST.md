@@ -27,7 +27,7 @@ about: Request a new feature or enhancement
 
 ## Affected Area
 
-- [ ] Blog content (`src/content/blog/`)
+- [ ] Blog content (`src/content/articles/`)
 - [ ] Site code (pages / components / layouts / styles)
 - [ ] Tooling / CI
 - [ ] Documentation
