@@ -1,11 +1,14 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import avatar from '../assets/avatar.jpg';
 import AuthorBio from '../components/AuthorBio.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { AUTHOR_LINKS, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { HOME_OG_IMAGE_PATH } from '../features/og-image/model';
 import { groupByYear, toTimelineEntry } from '../features/timeline/model';
 
 const articles = await getCollection('articles');
@@ -35,7 +38,11 @@ const yearGroups = groupByYear(entries);
 
 <html lang="ja">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead
+			title={SITE_TITLE}
+			description={SITE_DESCRIPTION}
+			ogImagePath={HOME_OG_IMAGE_PATH}
+		/>
 	</head>
 	<body>
 		<Header />
@@ -58,9 +65,12 @@ const yearGroups = groupByYear(entries);
 									}
 								>
 									{entry.kind === 'native' ? (
-										<span
-											class="entry-icon entry-icon-internal"
-											aria-hidden="true"
+										<Image
+											class="entry-icon entry-favicon"
+											src={avatar}
+											alt=""
+											width={32}
+											height={32}
 										/>
 									) : (
 										<img
@@ -127,9 +137,6 @@ const yearGroups = groupByYear(entries);
 		width: 16px;
 		height: 16px;
 		display: block;
-	}
-	.entry-icon-internal {
-		background: var(--on-surface);
 	}
 	.entry-favicon {
 		object-fit: cover;

@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import avatar from '../assets/avatar.jpg';
 import { SITE_DESCRIPTION, SITE_TITLE, type AuthorLink } from '../consts';
 
 interface Props {
@@ -9,7 +11,14 @@ const { links } = Astro.props;
 ---
 
 <section class="author-profile">
-	<div class="author-avatar" aria-hidden="true"></div>
+	<Image
+		class="author-avatar"
+		src={avatar}
+		alt=""
+		width={96}
+		height={96}
+		aria-hidden="true"
+	/>
 	<div class="author-name">{SITE_TITLE}</div>
 </section>
 <p class="author-bio">{SITE_DESCRIPTION}</p>
@@ -34,7 +43,7 @@ const { links } = Astro.props;
 		width: 48px;
 		height: 48px;
 		flex-shrink: 0;
-		background: var(--surface-container);
+		object-fit: cover;
 	}
 	.author-name {
 		font-size: 16px;

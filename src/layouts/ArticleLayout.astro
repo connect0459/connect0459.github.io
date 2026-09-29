@@ -5,20 +5,35 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import { ogImagePath } from '../features/og-image/model';
 import type { NativeTimelineEntry } from '../features/timeline/model';
 
 type Props = CollectionEntry<'articles'>['data'] & {
+	slug: string;
 	prev: NativeTimelineEntry | null;
 	next: NativeTimelineEntry | null;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, prev, next } =
-	Astro.props;
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	heroImage,
+	slug,
+	prev,
+	next,
+} = Astro.props;
 ---
 
 <html lang="ja">
 	<head>
-		<BaseHead title={title} description={description} image={heroImage} />
+		<BaseHead
+			title={title}
+			description={description}
+			image={heroImage}
+			ogImagePath={ogImagePath(slug)}
+		/>
 	</head>
 	<body>
 		<Header />
