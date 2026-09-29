@@ -2,7 +2,20 @@
 // You can import this data from anywhere in your site by using the `import` keyword.
 
 export const SITE_TITLE = 'connect0459';
-export const SITE_DESCRIPTION = 'Web / モバイル など色々やってます。';
+export const SITE_DESCRIPTION = 'Personal website of connect0459.';
+
+export interface AuthorProfile {
+	readonly realName: string;
+	readonly introduction: readonly string[];
+}
+
+export const AUTHOR_PROFILE: AuthorProfile = {
+	realName: 'Akira Nakaoka',
+	introduction: [
+		'技術のことや日々のことを書き残すブログです。',
+		'Web・モバイルを中心に、フルサイクルな開発に取り組んでいます。',
+	],
+};
 
 export interface AuthorLink {
 	readonly label: string;
