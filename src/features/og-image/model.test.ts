@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { buildOgImageNode, ogImagePath, type OgImageNode } from './model';
+import {
+	HOME_OG_IMAGE_PATH,
+	buildOgImageNode,
+	ogImagePath,
+	type OgImageNode,
+} from './model';
 
 function collectTexts(node: OgImageNode | string): string[] {
 	if (typeof node === 'string') {
@@ -33,13 +38,19 @@ function collectImageSources(node: OgImageNode | string): string[] {
 const card = {
 	title: 'Astroで個人ブログを作った',
 	pubDate: new Date('2026-09-21'),
-	siteTitle: 'connect0459',
+	byline: 'connect0459',
 	avatarSrc: 'data:image/jpeg;base64,AAAA',
 };
 
 describe('ogImagePath', () => {
 	it('places an article image under /og/ named after its slug', () => {
 		expect(ogImagePath('my-post')).toBe('/og/my-post.png');
+	});
+});
+
+describe('HOME_OG_IMAGE_PATH', () => {
+	it('places the home page image under /og/', () => {
+		expect(HOME_OG_IMAGE_PATH).toBe('/og/index.png');
 	});
 });
 
@@ -52,7 +63,20 @@ describe('buildOgImageNode', () => {
 		expect(collectTexts(buildOgImageNode(card))).toContain('2026-09-21');
 	});
 
-	it('shows the site title as the byline', () => {
+	it('omits the date for a card without a publication date', () => {
+		const homeCard = {
+			title: card.title,
+			byline: card.byline,
+			avatarSrc: card.avatarSrc,
+		};
+
+		expect(collectTexts(buildOgImageNode(homeCard))).toEqual([
+			card.title,
+			card.byline,
+		]);
+	});
+
+	it('shows the byline next to the avatar', () => {
 		expect(collectTexts(buildOgImageNode(card))).toContain('connect0459');
 	});
 

@@ -15,10 +15,12 @@ export interface OgImageNode {
 
 export interface OgImageCard {
 	readonly title: string;
-	readonly pubDate: Date;
-	readonly siteTitle: string;
+	readonly pubDate?: Date;
+	readonly byline: string;
 	readonly avatarSrc: string;
 }
+
+export const HOME_OG_IMAGE_PATH = '/og/index.png';
 
 export function ogImagePath(slug: string): string {
 	return `/og/${slug}.png`;
@@ -80,16 +82,20 @@ export function buildOgImageNode(card: OgImageCard): OgImageNode {
 											type: 'div',
 											props: {
 												style: { color: '#121212' },
-												children: card.siteTitle,
+												children: card.byline,
 											},
 										},
 									],
 								},
 							},
-							{
-								type: 'div',
-								props: { children: formatFullDate(card.pubDate) },
-							},
+							...(card.pubDate
+								? [
+										{
+											type: 'div',
+											props: { children: formatFullDate(card.pubDate) },
+										},
+									]
+								: []),
 						],
 					},
 				},
