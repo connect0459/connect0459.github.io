@@ -15,15 +15,10 @@ Blog post content under `src/content/articles/` is exempt: posts may be written 
 
 ## Project Structure
 
-- `src/pages/` — file-based routing; each `.astro` file (or dynamic route like `articles/[...slug].astro`) becomes a page. `rss.xml.js` generates the RSS feed.
-- `src/content/articles/` — blog posts as Markdown (`.md`) or MDX (`.mdx`). Frontmatter is validated against the schema in `src/content.config.ts` (`title`, `description`, `pubDate` required; `updatedDate`, `heroImage` optional).
-- `src/components/` — reusable `.astro` components (header, footer, meta tags, etc.).
-- `src/layouts/` — page layouts (e.g. `ArticleLayout.astro`).
-- `src/styles/` — global CSS.
-- `src/assets/` — images and fonts processed by Astro (hero images, local fonts).
-- `src/consts.ts` — site-wide constants (`SITE_TITLE`, `SITE_DESCRIPTION`).
-- `public/` — static files served as-is (favicons, etc.).
-- `astro.config.mjs` — Astro configuration (site URL, MDX/sitemap integrations, fonts).
+The standard Astro layout applies (file-based routing under `src/pages/`, content collections declared in `src/content.config.ts`, which is the source of truth for frontmatter). Read the directory tree for the file inventory; it is intentionally not duplicated here. Placement follows these rules:
+
+- Business rules live in `src/features/<feature>/` as pure modules with colocated Vitest tests. Pages, components, and layouts stay thin and delegate to them.
+- Code with external I/O (file system, image rendering) stays outside `src/features/`, in `src/lib/` or an endpoint under `src/pages/`, so that features remain testable without mocks.
 
 ## Tooling
 
