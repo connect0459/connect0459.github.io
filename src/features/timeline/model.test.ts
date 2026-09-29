@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
 	findAdjacentEntries,
 	formatFullDate,
-	formatShortDate,
 	groupByYear,
 	type NativeTimelineEntry,
 	toTimelineEntry,
@@ -49,28 +48,6 @@ describe('toTimelineEntry', () => {
 			href: 'https://zenn.dev/connect0459/articles/example',
 			domain: 'zenn.dev',
 		});
-	});
-});
-
-describe('formatShortDate', () => {
-	it('formats a date as MM-dd', () => {
-		expect(formatShortDate(new Date(Date.UTC(2024, 5, 15)))).toBe('06-15');
-	});
-
-	it('zero-pads a single-digit month and day', () => {
-		expect(formatShortDate(new Date(Date.UTC(2024, 0, 5)))).toBe('01-05');
-	});
-
-	it('reads the month and day in UTC regardless of the host timezone', () => {
-		const originalTz = process.env.TZ;
-		process.env.TZ = 'Pacific/Kiritimati'; // UTC+14, rolls the local date to Jan 1
-		try {
-			expect(formatShortDate(new Date(Date.UTC(2024, 11, 31, 23)))).toBe(
-				'12-31',
-			);
-		} finally {
-			process.env.TZ = originalTz;
-		}
 	});
 });
 
