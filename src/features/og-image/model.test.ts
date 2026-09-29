@@ -39,7 +39,7 @@ const card = {
 	title: 'Astroで個人ブログを作った',
 	pubDate: new Date('2026-09-21'),
 	byline: 'connect0459',
-	avatarSrc: 'data:image/jpeg;base64,AAAA',
+	avatarSrc: 'data:image/png;base64,AAAA',
 };
 
 describe('ogImagePath', () => {
