@@ -16,6 +16,11 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = FallbackImage } = Astro.props;
+const ga4Id = import.meta.env.PUBLIC_GA4_ID;
+const ga4InitScript = `window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', ${JSON.stringify(ga4Id)});`;
 ---
 
 <!-- Global Metadata -->
@@ -50,3 +55,16 @@ const { title, description, image = FallbackImage } = Astro.props;
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
+
+{
+	ga4Id && (
+		<>
+			<script
+				is:inline
+				async
+				src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
+			/>
+			<script is:inline set:html={ga4InitScript} />
+		</>
+	)
+}
