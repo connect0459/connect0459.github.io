@@ -12,26 +12,26 @@ import {
 const assetPath = (file: string) =>
 	path.resolve(process.cwd(), 'src/assets', file);
 
+const font = readFile(assetPath('fonts/NotoSansJP-Bold.otf'));
+const avatarSrc = readFile(assetPath('avatar.jpg')).then(
+	(avatar) => `data:image/jpeg;base64,${avatar.toString('base64')}`,
+);
+
 export async function renderOgImage(card: {
 	title: string;
 	pubDate?: Date;
 	byline?: string;
 }): Promise<Response> {
-	const [font, avatar] = await Promise.all([
-		readFile(assetPath('fonts/NotoSansJP-Bold.otf')),
-		readFile(assetPath('avatar.jpg')),
-	]);
-
 	const svg = await satori(
 		buildOgImageNode({
 			byline: SITE_TITLE,
 			...card,
-			avatarSrc: `data:image/jpeg;base64,${avatar.toString('base64')}`,
+			avatarSrc: await avatarSrc,
 		}) as Parameters<typeof satori>[0],
 		{
 			width: OG_IMAGE_WIDTH,
 			height: OG_IMAGE_HEIGHT,
-			fonts: [{ name: 'Noto Sans JP', data: font, weight: 700 }],
+			fonts: [{ name: 'Noto Sans JP', data: await font, weight: 700 }],
 		},
 	);
 
