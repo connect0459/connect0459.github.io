@@ -80,7 +80,7 @@ Package-by-features: new `src/features/timeline/` directory. Everything here is 
 
 - [ ] `src/pages/rss.xml.js`: read from the `articles` collection, with links pointing at `/articles/<id>/`; confirm whether `links` entries are included too (see open decisions).
 - [ ] Update every remaining `getCollection('blog')` call site to `'articles'`.
-- [ ] Set the real `site` URL in `astro.config.mjs` (currently `https://example.com`) once the hosting domain is decided.
+- [x] Set the real `site` URL in `astro.config.mjs` to `https://connect0459.github.io`.
 
 ## Phase 7: QA & CI
 
