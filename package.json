@@ -26,24 +26,24 @@
 		"esbuild": true
 	},
 	"dependencies": {
-		"@astrojs/mdx": "^7.0.8",
-		"@astrojs/rss": "^4.0.19",
-		"@astrojs/sitemap": "^3.7.3",
-		"astro": "^7.2.8",
-		"satori": "^0.33.5",
-		"sharp": "^0.35.0"
+		"@astrojs/mdx": "8.0.2",
+		"@astrojs/rss": "4.0.19",
+		"@astrojs/sitemap": "3.7.4",
+		"astro": "7.3.5",
+		"satori": "0.35.0",
+		"sharp": "0.35.5"
 	},
 	"devDependencies": {
 		"@astrojs/check": "0.9.10",
 		"@eslint/js": "10.0.1",
-		"@vitest/coverage-v8": "5.0.0",
-		"eslint": "10.9.1",
-		"eslint-plugin-astro": "1.7.0",
+		"@vitest/coverage-v8": "5.0.3",
+		"eslint": "10.12.0",
+		"eslint-plugin-astro": "3.2.1",
 		"markdownlint-cli2": "0.23.3",
-		"prettier": "3.9.6",
-		"prettier-plugin-astro": "0.14.1",
+		"prettier": "3.9.9",
+		"prettier-plugin-astro": "1.1.0",
 		"typescript": "6.0.3",
-		"typescript-eslint": "8.68.0",
-		"vitest": "5.0.0"
+		"typescript-eslint": "8.71.0",
+		"vitest": "5.0.3"
 	}
 }
