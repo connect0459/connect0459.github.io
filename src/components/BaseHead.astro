@@ -64,15 +64,13 @@ gtag('config', ${JSON.stringify(ga4Id)});`;
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content={ogImageUrl} />
 
-{
-	ga4Id && (
-		<>
-			<script
-				is:inline
-				async
-				src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
-			/>
-			<script is:inline set:html={ga4InitScript} />
-		</>
-	)
-}
+{ga4Id && (
+	<>
+		<script
+			is:inline
+			async
+			src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
+		/>
+		<script is:inline set:html={ga4InitScript} />
+	</>
+)}

@@ -25,22 +25,18 @@ const { links } = Astro.props;
 			<span class="author-real-name">{AUTHOR_PROFILE.realName}</span>
 		</div>
 	</section>
-	{
-		AUTHOR_PROFILE.introduction.map((paragraph) => (
-			<p class="author-bio">{paragraph}</p>
-		))
-	}
-	{
-		links && (
-			<div class="author-social">
-				{links.map((link) => (
-					<a href={link.href} target="_blank" rel="noopener noreferrer">
-						{link.label} ↗
-					</a>
-				))}
-			</div>
-		)
-	}
+	{AUTHOR_PROFILE.introduction.map((paragraph) => (
+		<p class="author-bio">{paragraph}</p>
+	))}
+	{links && (
+		<div class="author-social">
+			{links.map((link) => (
+				<a href={link.href} target="_blank" rel="noopener noreferrer">
+					{link.label} ↗
+				</a>
+			))}
+		</div>
+	)}
 </div>
 <style>
 	.author-profile {

@@ -49,52 +49,48 @@ const yearGroups = groupByYear(entries);
 		<main>
 			<AuthorBio links={AUTHOR_LINKS} />
 			<div class="timeline">
-				{
-					yearGroups.map((group) => (
-						<div class="year-group">
-							<div class="year-label">{group.year}</div>
-							{group.entries.map((entry) => (
-								<a
-									class="entry-row"
-									href={entry.href}
-									target={entry.kind === 'external' ? '_blank' : undefined}
-									rel={
-										entry.kind === 'external'
-											? 'noopener noreferrer'
-											: undefined
-									}
-								>
-									{entry.kind === 'native' ? (
-										<Image
-											class="entry-icon entry-favicon"
-											src={avatar}
-											alt=""
-											width={32}
-											height={32}
-										/>
-									) : (
-										<img
-											class="entry-icon entry-favicon"
-											src={`https://www.google.com/s2/favicons?sz=32&domain=${entry.domain}`}
-											alt=""
-											width={16}
-											height={16}
-										/>
+				{yearGroups.map((group) => (
+					<div class="year-group">
+						<div class="year-label">{group.year}</div>
+						{group.entries.map((entry) => (
+							<a
+								class="entry-row"
+								href={entry.href}
+								target={entry.kind === 'external' ? '_blank' : undefined}
+								rel={
+									entry.kind === 'external' ? 'noopener noreferrer' : undefined
+								}
+							>
+								{entry.kind === 'native' ? (
+									<Image
+										class="entry-icon entry-favicon"
+										src={avatar}
+										alt=""
+										width={32}
+										height={32}
+									/>
+								) : (
+									<img
+										class="entry-icon entry-favicon"
+										src={`https://www.google.com/s2/favicons?sz=32&domain=${entry.domain}`}
+										alt=""
+										width={16}
+										height={16}
+									/>
+								)}
+								<span class="entry-main">
+									<span class="entry-title">{entry.title}</span>
+									{entry.kind === 'external' && (
+										<span class="entry-domain">{entry.domain} ↗</span>
 									)}
-									<span class="entry-main">
-										<span class="entry-title">{entry.title}</span>
-										{entry.kind === 'external' && (
-											<span class="entry-domain">{entry.domain} ↗</span>
-										)}
-									</span>
-									<span class="entry-date">
-										<FormattedDate date={entry.pubDate} />
-									</span>
-								</a>
-							))}
-						</div>
-					))
-				}
+								</span>
+								<span class="entry-date">
+									<FormattedDate date={entry.pubDate} />
+								</span>
+							</a>
+						))}
+					</div>
+				))}
 			</div>
 		</main>
 		<Footer />
