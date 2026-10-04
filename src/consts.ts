@@ -24,6 +24,10 @@ export interface AuthorLink {
 
 export const AUTHOR_LINKS: readonly AuthorLink[] = [
 	{ label: 'GitHub', href: 'https://github.com/connect0459' },
-	{ label: 'Zenn', href: 'https://zenn.dev/connect0459' },
+	{
+		label: 'LinkedIn',
+		href: 'https://www.linkedin.com/in/akira-nakaoka-150368382',
+	},
 	{ label: 'X', href: 'https://x.com/connect0459' },
+	{ label: 'Zenn', href: 'https://zenn.dev/connect0459' },
 ];
