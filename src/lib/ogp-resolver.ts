@@ -65,7 +65,9 @@ export function createOgpResolver({
 			return cached?.ogp;
 		}
 		entries[url] = { fetchedAt: now(), ogp: fresh };
-		writing = writing.then(() => writeCache(cacheFile, entries));
+		writing = writing
+			.then(() => writeCache(cacheFile, entries))
+			.catch(() => undefined);
 		await writing;
 		return fresh;
 	}

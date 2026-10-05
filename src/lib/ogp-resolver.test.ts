@@ -91,4 +91,25 @@ describe('createOgpResolver', () => {
 		await Promise.all([resolve(URL_A), resolve(URL_A), resolve(URL_A)]);
 		expect(calls).toHaveLength(1);
 	});
+
+	describe('when the cache cannot be written', () => {
+		const URL_B = 'https://example.com/b';
+
+		beforeEach(async () => {
+			const blocker = join(await mkdtemp(join(tmpdir(), 'ogp-')), 'blocker');
+			await writeFile(blocker, '');
+			cacheFile = join(blocker, 'cache.json');
+		});
+
+		it('still returns the metadata that was just fetched', async () => {
+			const resolve = resolverAt(0, () => htmlResponse(PAGE));
+			expect((await resolve(URL_A))?.title).toBe('Title A');
+		});
+
+		it('keeps resolving later addresses after a failed write', async () => {
+			const resolve = resolverAt(0, () => htmlResponse(PAGE));
+			await resolve(URL_A);
+			expect((await resolve(URL_B))?.title).toBe('Title A');
+		});
+	});
 });
