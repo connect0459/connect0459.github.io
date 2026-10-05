@@ -74,6 +74,18 @@
 	--dur: 280ms;
 	--dur-slow: 600ms;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+	@view-transition {
+		navigation: auto;
+	}
+
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation-duration: var(--dur);
+		animation-timing-function: var(--ease);
+	}
+}
 body {
 	font-family: var(--font-sans);
 	margin: 0;
