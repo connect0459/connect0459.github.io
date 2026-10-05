@@ -112,4 +112,18 @@ describe('cardFor', () => {
 		);
 		expect(JSON.stringify(card)).not.toContain('link-card__favicon');
 	});
+
+	it("does not send the reader's referrer to the sites that host the images", async () => {
+		const card = await cardFor(
+			paragraph(link(OGP.url)),
+			resolveFromMemory({
+				[OGP.url]: { ...OGP, favicon: 'https://example.com/f.ico' },
+			}),
+		);
+		const images = JSON.stringify(card).match(/"tagName":"img"[^}]*}/g) ?? [];
+		expect(images).toHaveLength(2);
+		for (const image of images) {
+			expect(image).toContain('"referrerPolicy":"no-referrer"');
+		}
+	});
 });

@@ -112,4 +112,42 @@ describe('createOgpResolver', () => {
 			expect((await resolve(URL_B))?.title).toBe('Title A');
 		});
 	});
+
+	it('does not retry an address that already failed during the same run', async () => {
+		const resolve = resolverAt(0, () => htmlResponse('', 404));
+		await resolve(URL_A);
+		await resolve(URL_A);
+		expect(calls).toHaveLength(1);
+	});
+
+	it('ignores a response that is not a web page', async () => {
+		const resolve = resolverAt(
+			0,
+			() =>
+				new Response(PAGE, {
+					headers: { 'content-type': 'application/pdf' },
+				}),
+		);
+		expect(await resolve(URL_A)).toBeUndefined();
+	});
+
+	it('accepts XHTML responses', async () => {
+		const resolve = resolverAt(
+			0,
+			() =>
+				new Response(PAGE, {
+					headers: { 'content-type': 'application/xhtml+xml; charset=utf-8' },
+				}),
+		);
+		expect((await resolve(URL_A))?.title).toBe('Title A');
+	});
+
+	it('accepts a response that declares no content type', async () => {
+		const resolve = resolverAt(0, () => {
+			const response = new Response(PAGE);
+			response.headers.delete('content-type');
+			return response;
+		});
+		expect((await resolve(URL_A))?.title).toBe('Title A');
+	});
 });

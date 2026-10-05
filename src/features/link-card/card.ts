@@ -31,6 +31,7 @@ export function buildCard(ogp: Ogp): Element {
 							src: ogp.favicon,
 							alt: '',
 							loading: 'lazy',
+							referrerPolicy: 'no-referrer',
 						}),
 					]
 				: []),
@@ -44,6 +45,7 @@ export function buildCard(ogp: Ogp): Element {
 					src: ogp.image,
 					alt: '',
 					loading: 'lazy',
+					referrerPolicy: 'no-referrer',
 				}),
 			]
 		: [];

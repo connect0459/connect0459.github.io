@@ -19,6 +19,11 @@ interface Options {
 	readonly now?: () => number;
 }
 
+function isWebPage(response: Response): boolean {
+	const type = response.headers.get('content-type');
+	return type === null || /html/i.test(type);
+}
+
 async function readCache(cacheFile: string): Promise<CacheFile> {
 	try {
 		return JSON.parse(await readFile(cacheFile, 'utf8')) as CacheFile;
@@ -48,7 +53,10 @@ export function createOgpResolver({
 				signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
 				headers: { accept: 'text/html' },
 			});
-			return response.ok ? parseOgp(await response.text(), url) : undefined;
+			if (!response.ok || !isWebPage(response)) {
+				return undefined;
+			}
+			return parseOgp(await response.text(), url);
 		} catch {
 			return undefined;
 		}
@@ -72,15 +80,15 @@ export function createOgpResolver({
 		return fresh;
 	}
 
-	const inFlight = new Map<string, Promise<Ogp | undefined>>();
+	const memo = new Map<string, Promise<Ogp | undefined>>();
 
 	return (url) => {
-		const pending = inFlight.get(url);
+		const pending = memo.get(url);
 		if (pending) {
 			return pending;
 		}
-		const started = resolveUncoalesced(url).finally(() => inFlight.delete(url));
-		inFlight.set(url, started);
+		const started = resolveUncoalesced(url);
+		memo.set(url, started);
 		return started;
 	};
 }
