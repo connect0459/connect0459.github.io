@@ -109,4 +109,13 @@ describe('replaceBareUrls', () => {
 		const html = JSON.stringify(tree);
 		expect(html).not.toContain('"img"');
 	});
+
+	it('omits the description block when the page declares no description', async () => {
+		const tree = root(paragraph(link(OGP.url)));
+		await replaceBareUrls(
+			tree,
+			resolveFromMemory({ [OGP.url]: { ...OGP, description: undefined } }),
+		);
+		expect(JSON.stringify(tree)).not.toContain('link-card__description');
+	});
 });

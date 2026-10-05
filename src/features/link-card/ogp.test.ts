@@ -61,4 +61,26 @@ describe('parseOgp', () => {
 		const html = `<meta property="og:title" content="T"><meta property="og:image" content="javascript:alert(1)">`;
 		expect(parseOgp(html, PAGE_URL)?.image).toBeUndefined();
 	});
+
+	it('decodes numeric character references in decimal and hexadecimal', () => {
+		const html = `<meta property="og:title" content="&#65;&#x42;&#99999999;&unknown;">`;
+		expect(parseOgp(html, PAGE_URL)?.title).toBe('AB&#99999999;&unknown;');
+	});
+
+	it('ignores meta tags that lack a name or a content', () => {
+		const html = `<meta charset="utf-8"><meta property="og:description"><meta property="og:title" content="T">`;
+		const ogp = parseOgp(html, PAGE_URL);
+		expect(ogp?.title).toBe('T');
+		expect(ogp?.description).toBeUndefined();
+	});
+
+	it('prefers the first declaration and matches names case-insensitively', () => {
+		const html = `<meta property="OG:Title" content="First"><meta property="og:title" content="Second">`;
+		expect(parseOgp(html, PAGE_URL)?.title).toBe('First');
+	});
+
+	it('drops an image whose address cannot be parsed', () => {
+		const html = `<meta property="og:title" content="T"><meta property="og:image" content="http://[bad">`;
+		expect(parseOgp(html, PAGE_URL)?.image).toBeUndefined();
+	});
 });

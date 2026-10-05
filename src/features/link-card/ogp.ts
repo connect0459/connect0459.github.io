@@ -14,12 +14,14 @@ const NAMED_ENTITIES: Readonly<Record<string, string>> = {
 	apos: "'",
 };
 
+const MAX_CODE_POINT = 0x10ffff;
+
 function decodeEntities(value: string): string {
 	return value.replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (match, body: string) => {
 		if (body.startsWith('#')) {
 			const isHex = body[1].toLowerCase() === 'x';
 			const code = Number.parseInt(body.slice(isHex ? 2 : 1), isHex ? 16 : 10);
-			return Number.isNaN(code) ? match : String.fromCodePoint(code);
+			return code > MAX_CODE_POINT ? match : String.fromCodePoint(code);
 		}
 		return NAMED_ENTITIES[body.toLowerCase()] ?? match;
 	});
@@ -34,10 +36,12 @@ function metaContents(html: string): Map<string, string> {
 		)) {
 			attributes.set(match[1].toLowerCase(), match[2] ?? match[3]);
 		}
-		const key = attributes.get('property') ?? attributes.get('name');
+		const key = (
+			attributes.get('property') ?? attributes.get('name')
+		)?.toLowerCase();
 		const content = attributes.get('content');
 		if (key !== undefined && content !== undefined && !contents.has(key)) {
-			contents.set(key.toLowerCase(), decodeEntities(content).trim());
+			contents.set(key, decodeEntities(content).trim());
 		}
 	}
 	return contents;

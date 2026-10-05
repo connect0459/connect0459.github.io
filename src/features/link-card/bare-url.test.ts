@@ -66,4 +66,19 @@ describe('bareUrlOf', () => {
 		};
 		expect(bareUrlOf(element)).toBeUndefined();
 	});
+
+	it('ignores a link that wraps other elements instead of plain text', () => {
+		const wrapped: Element = {
+			...link('https://example.com'),
+			children: [
+				{
+					type: 'element',
+					tagName: 'code',
+					properties: {},
+					children: [{ type: 'text', value: 'https://example.com' }],
+				},
+			],
+		};
+		expect(bareUrlOf(paragraph(wrapped))).toBeUndefined();
+	});
 });
