@@ -20,6 +20,13 @@ The standard Astro layout applies (file-based routing under `src/pages/`, conten
 - Business rules live in `src/features/<feature>/` as pure modules with colocated Vitest tests. Pages, components, and layouts stay thin and delegate to them.
 - Code with external I/O (file system, image rendering) stays outside `src/features/`, in `src/lib/` or an endpoint under `src/pages/`, so that features remain testable without mocks.
 
+## Writing Articles
+
+- A URL alone in its own paragraph (for example `https://example.com/page`) is rendered as a link preview card, with metadata fetched at build time and cached for a week under `node_modules/.cache/`. If the page cannot be read, it stays a plain link.
+- To show a URL as plain text, use `[text](url)` or put it in inline code. A URL inside a sentence is never converted.
+- The markdownlint bare-URL rule (MD034) is disabled for this reason.
+- Astro keeps rendered article HTML in its content store keyed by the article's content, so after changing the card pipeline, restart the dev server with `astro dev --force` to see it applied.
+
 ## Tooling
 
 - Node.js version is pinned by `.nvmrc` (see also `engines` in `package.json`). Use `nvm use` (or an equivalent version manager) before installing dependencies.
