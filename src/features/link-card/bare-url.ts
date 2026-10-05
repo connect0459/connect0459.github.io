@@ -10,6 +10,14 @@ function textOf(element: Element): string {
 		.join('');
 }
 
+function sameAddress(text: string, href: string): boolean {
+	try {
+		return new URL(text).href === new URL(href).href;
+	} catch {
+		return false;
+	}
+}
+
 export function bareUrlOf(paragraph: Element): string | undefined {
 	if (paragraph.tagName !== 'p') {
 		return undefined;
@@ -27,5 +35,5 @@ export function bareUrlOf(paragraph: Element): string | undefined {
 	if (typeof href !== 'string' || !/^https?:\/\//.test(href)) {
 		return undefined;
 	}
-	return textOf(only).trim() === href ? href : undefined;
+	return sameAddress(textOf(only).trim(), href) ? href : undefined;
 }

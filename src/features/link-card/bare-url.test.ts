@@ -81,4 +81,44 @@ describe('bareUrlOf', () => {
 		};
 		expect(bareUrlOf(paragraph(wrapped))).toBeUndefined();
 	});
+
+	it('detects an address whose path contains Japanese characters', () => {
+		expect(
+			bareUrlOf(
+				paragraph(
+					link(
+						'https://ja.wikipedia.org/wiki/%E6%97%A5%E6%9C%AC%E8%AA%9E',
+						'https://ja.wikipedia.org/wiki/日本語',
+					),
+				),
+			),
+		).toBe('https://ja.wikipedia.org/wiki/%E6%97%A5%E6%9C%AC%E8%AA%9E');
+	});
+
+	it('detects an address whose query contains Japanese characters', () => {
+		expect(
+			bareUrlOf(
+				paragraph(
+					link(
+						'https://example.com/a?q=%E3%81%82&x=1',
+						'https://example.com/a?q=あ&x=1',
+					),
+				),
+			),
+		).toBe('https://example.com/a?q=%E3%81%82&x=1');
+	});
+
+	it('ignores a link whose text is not an address at all', () => {
+		expect(
+			bareUrlOf(paragraph(link('https://example.com', 'not a url'))),
+		).toBeUndefined();
+	});
+
+	it('ignores a link whose text is a different address', () => {
+		expect(
+			bareUrlOf(
+				paragraph(link('https://example.com/a', 'https://example.com/b')),
+			),
+		).toBeUndefined();
+	});
 });
