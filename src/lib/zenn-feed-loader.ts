@@ -16,12 +16,15 @@ export function zennFeedLoader(feedUrl: string): Loader {
 				);
 			}
 			const entries = parseZennFeed(await response.text());
-			if (entries.length === 0) {
-				throw new Error(`Zenn feed contains no articles: ${feedUrl}`);
-			}
+			const parsed = await Promise.all(
+				entries.map(async ({ id, ...data }) => ({
+					id,
+					data: await parseData({ id, data }),
+				})),
+			);
 			store.clear();
-			for (const { id, ...data } of entries) {
-				store.set({ id, data: await parseData({ id, data }) });
+			for (const entry of parsed) {
+				store.set(entry);
 			}
 		},
 	};

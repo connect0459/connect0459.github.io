@@ -29,8 +29,22 @@ describe('parseZennFeed', () => {
 		]);
 	});
 
+	it('rejects a feed that contains no articles', () => {
+		expect(() => parseZennFeed(feedOf())).toThrow(/no articles/);
+	});
+
 	it('does not mistake the channel metadata for an article', () => {
-		expect(parseZennFeed(feedOf())).toEqual([]);
+		const xml = feedOf(
+			itemOf(
+				'Only article',
+				'https://zenn.dev/someone/articles/only',
+				'Thu, 01 Oct 2026 10:15:55 GMT',
+			),
+		);
+
+		expect(parseZennFeed(xml).map((entry) => entry.title)).toEqual([
+			'Only article',
+		]);
 	});
 
 	it('keeps articles published under a publication', () => {
@@ -78,6 +92,50 @@ describe('parseZennFeed', () => {
 		expect(() =>
 			parseZennFeed('<html><body>Under maintenance</body></html>'),
 		).toThrow();
+	});
+
+	it('rejects links that point outside zenn.dev', () => {
+		const xml = feedOf(
+			itemOf(
+				'T',
+				'https://example.com/someone/articles/x',
+				'Thu, 01 Oct 2026 10:15:55 GMT',
+			),
+		);
+
+		expect(() => parseZennFeed(xml)).toThrow(/zenn\.dev/);
+	});
+
+	it('rejects links that use a non-https scheme', () => {
+		const xml = feedOf(
+			itemOf('T', 'javascript:alert(1)', 'Thu, 01 Oct 2026 10:15:55 GMT'),
+		);
+
+		expect(() => parseZennFeed(xml)).toThrow();
+	});
+
+	it('reads tags that carry attributes', () => {
+		const xml = feedOf(
+			'<item><title domain="x">T</title><link rel="alternate">https://zenn.dev/someone/articles/x</link><pubDate>Thu, 01 Oct 2026 10:15:55 GMT</pubDate></item>',
+		);
+
+		expect(parseZennFeed(xml)[0]?.title).toBe('T');
+	});
+
+	it('leaves numeric character references in non-CDATA titles undecoded', () => {
+		const xml = feedOf(
+			'<item><title>It&#39;s</title><link>https://zenn.dev/someone/articles/x</link><pubDate>Thu, 01 Oct 2026 10:15:55 GMT</pubDate></item>',
+		);
+
+		expect(parseZennFeed(xml)[0]?.title).toBe('It&#39;s');
+	});
+
+	it('names the missing field when an item is incomplete', () => {
+		const xml = feedOf(
+			'<item><title>T</title><pubDate>Thu, 01 Oct 2026 10:15:55 GMT</pubDate></item>',
+		);
+
+		expect(() => parseZennFeed(xml)).toThrow(/missing link$/);
 	});
 
 	it('rejects an item without a title', () => {

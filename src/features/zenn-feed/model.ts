@@ -5,6 +5,8 @@ export interface ZennFeedEntry {
 	readonly pubDate: Date;
 }
 
+const ZENN_ORIGIN = 'https://zenn.dev';
+
 const XML_ENTITIES: Readonly<Record<string, string>> = {
 	'&lt;': '<',
 	'&gt;': '>',
@@ -26,12 +28,22 @@ function decodeText(raw: string): string {
 }
 
 function readTag(item: string, tag: string): string | undefined {
-	const match = new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`).exec(item);
+	const match = new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)</${tag}>`).exec(
+		item,
+	);
 	return match?.[1] === undefined ? undefined : decodeText(match[1]);
 }
 
+function assertZennUrl(url: string): URL {
+	const parsed = new URL(url);
+	if (parsed.origin !== ZENN_ORIGIN) {
+		throw new Error(`Zenn feed item links outside ${ZENN_ORIGIN}: ${url}`);
+	}
+	return parsed;
+}
+
 function toId(url: string): string {
-	const segments = new URL(url).pathname.split('/').filter(Boolean);
+	const segments = assertZennUrl(url).pathname.split('/').filter(Boolean);
 	const owner = segments[0];
 	const slug = segments.at(-1);
 	if (!owner || !slug) {
@@ -44,8 +56,17 @@ function toEntry(item: string): ZennFeedEntry {
 	const title = readTag(item, 'title');
 	const url = readTag(item, 'link');
 	const rawDate = readTag(item, 'pubDate');
+	const missing = (
+		[
+			['title', title],
+			['link', url],
+			['pubDate', rawDate],
+		] as const
+	)
+		.filter(([, value]) => !value)
+		.map(([name]) => name);
 	if (!title || !url || !rawDate) {
-		throw new Error('Zenn feed item is missing title, link or pubDate');
+		throw new Error(`Zenn feed item is missing ${missing.join(', ')}`);
 	}
 	const pubDate = new Date(rawDate);
 	if (Number.isNaN(pubDate.getTime())) {
@@ -59,5 +80,8 @@ export function parseZennFeed(xml: string): ZennFeedEntry[] {
 		throw new Error('Zenn feed response is not an RSS feed');
 	}
 	const items = xml.match(/<item>[\s\S]*?<\/item>/g) ?? [];
+	if (items.length === 0) {
+		throw new Error('Zenn feed contains no articles');
+	}
 	return items.map(toEntry);
 }
