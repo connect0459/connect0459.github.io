@@ -21,7 +21,7 @@ describe('parseZennFeed', () => {
 
 		expect(parseZennFeed(xml)).toEqual([
 			{
-				id: 'first',
+				id: 'someone/first',
 				title: 'First article',
 				url: 'https://zenn.dev/someone/articles/first',
 				pubDate: new Date('2026-10-01T10:15:55Z'),
@@ -42,7 +42,9 @@ describe('parseZennFeed', () => {
 			),
 		);
 
-		expect(parseZennFeed(xml).map((entry) => entry.id)).toEqual(['abc123']);
+		expect(parseZennFeed(xml).map((entry) => entry.id)).toEqual([
+			'some_publication/abc123',
+		]);
 	});
 
 	it('decodes XML entities in titles that are not wrapped in CDATA', () => {
@@ -53,9 +55,58 @@ describe('parseZennFeed', () => {
 		expect(parseZennFeed(xml)[0]?.title).toBe('A & B <C>');
 	});
 
+	it('keeps articles with the same slug under different owners apart', () => {
+		const xml = feedOf(
+			itemOf(
+				'A',
+				'https://zenn.dev/alice/articles/same',
+				'Thu, 01 Oct 2026 10:15:55 GMT',
+			),
+			itemOf(
+				'B',
+				'https://zenn.dev/bob/articles/same',
+				'Thu, 01 Oct 2026 10:15:55 GMT',
+			),
+		);
+
+		const ids = parseZennFeed(xml).map((entry) => entry.id);
+
+		expect(new Set(ids).size).toBe(2);
+	});
+
+	it('rejects input that is not an RSS feed', () => {
+		expect(() =>
+			parseZennFeed('<html><body>Under maintenance</body></html>'),
+		).toThrow();
+	});
+
+	it('rejects an item without a title', () => {
+		const xml = feedOf(
+			'<item><link>https://zenn.dev/someone/articles/x</link><pubDate>Thu, 01 Oct 2026 10:15:55 GMT</pubDate></item>',
+		);
+
+		expect(() => parseZennFeed(xml)).toThrow();
+	});
+
+	it('rejects an item without a link', () => {
+		const xml = feedOf(
+			'<item><title>T</title><pubDate>Thu, 01 Oct 2026 10:15:55 GMT</pubDate></item>',
+		);
+
+		expect(() => parseZennFeed(xml)).toThrow();
+	});
+
 	it('rejects an item without a publication date', () => {
 		const xml = feedOf(
 			'<item><title>T</title><link>https://zenn.dev/someone/articles/x</link></item>',
+		);
+
+		expect(() => parseZennFeed(xml)).toThrow();
+	});
+
+	it('rejects an item whose publication date cannot be parsed', () => {
+		const xml = feedOf(
+			itemOf('T', 'https://zenn.dev/someone/articles/x', 'not a date'),
 		);
 
 		expect(() => parseZennFeed(xml)).toThrow();

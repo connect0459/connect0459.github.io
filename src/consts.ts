@@ -32,4 +32,4 @@ export const AUTHOR_LINKS: readonly AuthorLink[] = [
 	{ label: 'Zenn', href: 'https://zenn.dev/connect0459' },
 ];
 
-export const ZENN_FEED_URL = 'https://zenn.dev/connect0459/feed';
+export const ZENN_FEED_URL = 'https://zenn.dev/connect0459/feed?all=1';
