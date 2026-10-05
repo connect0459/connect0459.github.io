@@ -26,6 +26,10 @@ pubDate: 2026-09-21
 | コンテンツ | Content Collectionsで管理 |
 | フォント | Noto Sans JP |
 
+Content Collectionsは、ブログ記事などの構造化されたMarkdownやMDX、JSON、YAMLファイルなどを型安全に管理するためのAstroの機能です。
+
+https://docs.astro.build/ja/guides/content-collections/
+
 Astroを選んだ理由は、コンテンツ中心のサイトを、JavaScriptをほぼ出さずに静的に書き出せるためです。ブログは読まれるだけのものなので、クライアント側で動かす処理がそもそもほとんどありません。
 
 ## 設計で決めたこと
