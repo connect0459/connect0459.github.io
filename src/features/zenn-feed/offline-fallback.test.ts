@@ -16,6 +16,15 @@ describe('canReuseStoredFeed', () => {
 		);
 	});
 
+	it('judges by the first positional argument when several are given', () => {
+		expect(canReuseStoredFeed(['dev', 'build'], 3)).toBe(true);
+		expect(canReuseStoredFeed(['build', 'dev'], 3)).toBe(false);
+	});
+
+	it('does not reuse previously loaded links when a flag value precedes the command', () => {
+		expect(canReuseStoredFeed(['--port', '4321', 'dev'], 3)).toBe(false);
+	});
+
 	it('never reuses previously loaded links in a production build', () => {
 		expect(canReuseStoredFeed(['build'], 3)).toBe(false);
 	});
