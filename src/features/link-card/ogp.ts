@@ -28,15 +28,28 @@ function decodeEntities(value: string): string {
 	});
 }
 
-function metaContents(html: string): Map<string, string> {
-	const contents = new Map<string, string>();
-	for (const [tag] of html.matchAll(/<meta\s[^>]*>/gi)) {
+const TAG_BODY = `(?:"[^"]*"|'[^']*'|[^>"'])*`;
+
+function* attributesOfTags(
+	html: string,
+	tagName: string,
+): Generator<Map<string, string>> {
+	for (const [tag] of html.matchAll(
+		new RegExp(`<${tagName}\\s${TAG_BODY}>`, 'gi'),
+	)) {
 		const attributes = new Map<string, string>();
 		for (const match of tag.matchAll(
 			/([a-z:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/gi,
 		)) {
 			attributes.set(match[1].toLowerCase(), match[2] ?? match[3]);
 		}
+		yield attributes;
+	}
+}
+
+function metaContents(html: string): Map<string, string> {
+	const contents = new Map<string, string>();
+	for (const attributes of attributesOfTags(html, 'meta')) {
 		const key = (
 			attributes.get('property') ?? attributes.get('name')
 		)?.toLowerCase();
@@ -68,13 +81,7 @@ function resolveWebAddress(address: string | undefined, pageUrl: string) {
 }
 
 function faviconHref(html: string): string | undefined {
-	for (const [tag] of html.matchAll(/<link\s[^>]*>/gi)) {
-		const attributes = new Map<string, string>();
-		for (const match of tag.matchAll(
-			/([a-z:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/gi,
-		)) {
-			attributes.set(match[1].toLowerCase(), match[2] ?? match[3]);
-		}
+	for (const attributes of attributesOfTags(html, 'link')) {
 		const relations = attributes.get('rel')?.toLowerCase().split(/\s+/) ?? [];
 		const href = attributes.get('href');
 		if (relations.includes('icon') && href) {

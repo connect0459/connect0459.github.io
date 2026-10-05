@@ -114,4 +114,16 @@ describe('parseOgp', () => {
 			'https://example.com/second.ico',
 		);
 	});
+
+	it('reads a title and description that contain a greater-than sign', () => {
+		const html = `<meta property="og:title" content="A -> B"><meta property="og:description" content="x > y">`;
+		const ogp = parseOgp(html, PAGE_URL);
+		expect(ogp?.title).toBe('A -> B');
+		expect(ogp?.description).toBe('x > y');
+	});
+
+	it('reads a favicon address that appears after an attribute containing a greater-than sign', () => {
+		const html = `<meta property="og:title" content="T"><link title="a > b" rel="icon" href="/f.ico">`;
+		expect(parseOgp(html, PAGE_URL)?.favicon).toBe('https://example.com/f.ico');
+	});
 });
