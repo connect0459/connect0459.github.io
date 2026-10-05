@@ -3,6 +3,7 @@ export interface Ogp {
 	readonly title: string;
 	readonly description?: string;
 	readonly image?: string;
+	readonly favicon?: string;
 	readonly siteName: string;
 }
 
@@ -52,18 +53,35 @@ function titleElementText(html: string): string | undefined {
 	return match ? decodeEntities(match[1]).trim() : undefined;
 }
 
-function resolveImage(image: string | undefined, pageUrl: string) {
-	if (!image) {
+function resolveWebAddress(address: string | undefined, pageUrl: string) {
+	if (!address) {
 		return undefined;
 	}
 	try {
-		const resolved = new URL(image, pageUrl);
+		const resolved = new URL(address, pageUrl);
 		return resolved.protocol === 'http:' || resolved.protocol === 'https:'
 			? resolved.href
 			: undefined;
 	} catch {
 		return undefined;
 	}
+}
+
+function faviconHref(html: string): string | undefined {
+	for (const [tag] of html.matchAll(/<link\s[^>]*>/gi)) {
+		const attributes = new Map<string, string>();
+		for (const match of tag.matchAll(
+			/([a-z:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/gi,
+		)) {
+			attributes.set(match[1].toLowerCase(), match[2] ?? match[3]);
+		}
+		const relations = attributes.get('rel')?.toLowerCase().split(/\s+/) ?? [];
+		const href = attributes.get('href');
+		if (relations.includes('icon') && href) {
+			return decodeEntities(href).trim();
+		}
+	}
+	return undefined;
 }
 
 export function parseOgp(html: string, pageUrl: string): Ogp | undefined {
@@ -77,7 +95,8 @@ export function parseOgp(html: string, pageUrl: string): Ogp | undefined {
 		title,
 		description:
 			meta.get('og:description') || meta.get('description') || undefined,
-		image: resolveImage(meta.get('og:image'), pageUrl),
+		image: resolveWebAddress(meta.get('og:image'), pageUrl),
+		favicon: resolveWebAddress(faviconHref(html), pageUrl),
 		siteName: meta.get('og:site_name') || new URL(pageUrl).hostname,
 	};
 }

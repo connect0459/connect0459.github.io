@@ -94,4 +94,22 @@ describe('cardFor', () => {
 		);
 		expect(JSON.stringify(card)).not.toContain('link-card__description');
 	});
+
+	it('shows the favicon next to the site name when the page has one', async () => {
+		const card = await cardFor(
+			paragraph(link(OGP.url)),
+			resolveFromMemory({
+				[OGP.url]: { ...OGP, favicon: 'https://example.com/f.ico' },
+			}),
+		);
+		expect(JSON.stringify(card)).toContain('https://example.com/f.ico');
+	});
+
+	it('omits the favicon when the page has none', async () => {
+		const card = await cardFor(
+			paragraph(link(OGP.url)),
+			resolveFromMemory({ [OGP.url]: OGP }),
+		);
+		expect(JSON.stringify(card)).not.toContain('link-card__favicon');
+	});
 });

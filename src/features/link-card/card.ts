@@ -23,7 +23,19 @@ export function buildCard(ogp: Ogp): Element {
 					]),
 				]
 			: []),
-		el('span', { className: ['link-card__site'] }, [text(ogp.siteName)]),
+		el('span', { className: ['link-card__site'] }, [
+			...(ogp.favicon
+				? [
+						el('img', {
+							className: ['link-card__favicon'],
+							src: ogp.favicon,
+							alt: '',
+							loading: 'lazy',
+						}),
+					]
+				: []),
+			text(ogp.siteName),
+		]),
 	];
 	const image = ogp.image
 		? [

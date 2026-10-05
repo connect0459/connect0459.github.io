@@ -83,4 +83,35 @@ describe('parseOgp', () => {
 		const html = `<meta property="og:title" content="T"><meta property="og:image" content="http://[bad">`;
 		expect(parseOgp(html, PAGE_URL)?.image).toBeUndefined();
 	});
+
+	it('reads the favicon address declared by the page', () => {
+		const html = `<meta property="og:title" content="T"><link rel="icon" href="/favicon.svg">`;
+		expect(parseOgp(html, PAGE_URL)?.favicon).toBe(
+			'https://example.com/favicon.svg',
+		);
+	});
+
+	it('accepts the shortcut icon spelling and any attribute order', () => {
+		const html = `<meta property="og:title" content="T"><link href='https://cdn.example.com/f.ico' rel='shortcut icon'>`;
+		expect(parseOgp(html, PAGE_URL)?.favicon).toBe(
+			'https://cdn.example.com/f.ico',
+		);
+	});
+
+	it('does not mistake other link relations for a favicon', () => {
+		const html = `<meta property="og:title" content="T"><link rel="stylesheet" href="/a.css"><link rel="apple-touch-icon" href="/touch.png">`;
+		expect(parseOgp(html, PAGE_URL)?.favicon).toBeUndefined();
+	});
+
+	it('omits the favicon when none is declared or it is not an http address', () => {
+		const html = `<meta property="og:title" content="T"><link href="/no-rel.png"><link rel="icon" href="data:image/png;base64,AAAA"><link rel="icon">`;
+		expect(parseOgp(html, PAGE_URL)?.favicon).toBeUndefined();
+	});
+
+	it('skips an icon declaration without an address and uses the next one', () => {
+		const html = `<meta property="og:title" content="T"><link rel="icon"><link rel="icon" href="/second.ico">`;
+		expect(parseOgp(html, PAGE_URL)?.favicon).toBe(
+			'https://example.com/second.ico',
+		);
+	});
 });
