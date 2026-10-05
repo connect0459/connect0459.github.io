@@ -1,15 +1,27 @@
 import type { Loader } from 'astro/loaders';
 import { parseZennFeed } from '../features/zenn-feed/model';
+import { canReuseStoredFeed } from '../features/zenn-feed/offline-fallback';
 
 const FETCH_TIMEOUT_MS = 10_000;
 
 export function zennFeedLoader(feedUrl: string): Loader {
 	return {
 		name: 'zenn-feed-loader',
-		load: async ({ store, parseData }) => {
-			const response = await fetch(feedUrl, {
-				signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-			});
+		load: async ({ store, parseData, logger }) => {
+			let response: Response;
+			try {
+				response = await fetch(feedUrl, {
+					signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+				});
+			} catch (error) {
+				if (canReuseStoredFeed(process.argv.slice(2), store.keys().length)) {
+					logger.warn(
+						`Could not reach the Zenn feed; using ${store.keys().length} previously loaded links: ${feedUrl}`,
+					);
+					return;
+				}
+				throw error;
+			}
 			if (!response.ok) {
 				throw new Error(
 					`Failed to fetch Zenn feed (${response.status}): ${feedUrl}`,
