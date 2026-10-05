@@ -6,7 +6,7 @@ pubDate: 2026-09-21
 
 ## はじめに
 
-技術記事はこれまで主にZennに書いてきました。ただ、プラットフォームに置いた文章は、そのサービスの都合で見え方も居場所も変わります。自分の書いたものを一覧できる場所を、自分の管理下に持っておきたくなり、個人ブログを作りました。
+技術記事はこれまで主にZennに書いてきました。ただ、プラットフォームに置いた文章は、そのサービスの都合で見え方や受け取られ方が変わります。自分の書いたものを一覧できる場所を、自分の管理下に持っておきたくなり、個人ブログを作りました。
 
 この記事は、その初回のエントリーです。
 
@@ -22,9 +22,9 @@ pubDate: 2026-09-21
 
 | 項目 | 採用したもの |
 | --- | --- |
-| フレームワーク | [Astro](https://astro.build/) 7 |
-| コンテンツ | Content Collections（Markdown / MDX） |
-| フォント | Noto Sans JP（Astroのフォント機能でGoogle Fontsから取得） |
+| フレームワーク | [Astro](https://astro.build/) |
+| コンテンツ | Content Collectionsで管理 |
+| フォント | Noto Sans JP |
 
 Astroを選んだ理由は、コンテンツ中心のサイトを、JavaScriptをほぼ出さずに静的に書き出せるためです。ブログは読まれるだけのものなので、クライアント側で動かす処理がそもそもほとんどありません。
 
@@ -32,14 +32,14 @@ Astroを選んだ理由は、コンテンツ中心のサイトを、JavaScript�
 
 記事と外部投稿を1本のタイムラインにするため、 `articles` と `links` の2つのコレクションを用意しました。
 
-- `articles`: このブログ内に本文を持つ記事。 `/articles/<slug>/` で表示
-- `links`: Zennなど外部に書いた記事へのリンク。タイトル・URL・日付だけを持つ
+- `articles`: このブログ内に本文を持つ記事。 `/articles/<slug>/` で表示。
+- `links`: Zennなど外部に書いた記事へのリンク。タイトル・URL・日付だけを持つ。
 
-`links` は本文を持たないため、YAMLファイル1つを `file()` ローダーで読み込んでいます。
+`links` は本文を持たないため、ZennのRSSフィードをビルド時に取得するカスタムローダーで読み込んでいます。タイトルや日付を手で書き写す必要がなく、Zennで公開した内容がそのまま反映されます。
 
 ```ts
 const links = defineCollection({
-  loader: file('./src/content/links/links.yaml'),
+  loader: zennFeedLoader(ZENN_FEED_URL),
   schema: z.object({
     title: z.string(),
     url: z.url(),

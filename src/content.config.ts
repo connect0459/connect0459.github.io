@@ -1,6 +1,8 @@
 import { defineCollection } from 'astro:content';
-import { file, glob } from 'astro/loaders';
+import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { ZENN_FEED_URL } from './consts';
+import { zennFeedLoader } from './lib/zenn-feed-loader';
 
 const articles = defineCollection({
 	// Load Markdown and MDX files in the `src/content/articles/` directory.
@@ -18,7 +20,7 @@ const articles = defineCollection({
 });
 
 const links = defineCollection({
-	loader: file('./src/content/links/links.yaml'),
+	loader: zennFeedLoader(ZENN_FEED_URL),
 	schema: z.object({
 		title: z.string(),
 		url: z.url(),

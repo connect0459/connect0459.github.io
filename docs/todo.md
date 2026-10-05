@@ -36,7 +36,7 @@ This repository is currently the unmodified Astro starter blog template. This pl
 ## Phase 1: Content model
 
 - [x] Rename the `blog` collection to `articles` in `src/content.config.ts` (loader base `./src/content/articles`); schema unchanged (`title`, `description`, `pubDate`, `updatedDate?`, `heroImage?`).
-- [x] Add a `links` collection for external cross-posts: `{ title: string, url: z.url(), pubDate: z.coerce.date() }`, no body content (implemented via the `file()` loader over a single keyed `links.yaml`, since there is no per-entry body).
+- [x] Add a `links` collection for external cross-posts: `{ title: string, url: z.url(), pubDate: z.coerce.date() }`, no body content (populated at build time from the Zenn RSS feed via a custom loader in `src/lib/zenn-feed-loader.ts`; parsing lives in `src/features/zenn-feed/`).
 - [x] Remove `src/pages/about.astro` — its role is replaced by the home page's inline bio.
 
 ## Phase 2: Timeline domain logic (Red/Green TDD)
