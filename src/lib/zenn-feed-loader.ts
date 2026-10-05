@@ -14,9 +14,10 @@ export function zennFeedLoader(feedUrl: string): Loader {
 					signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
 				});
 			} catch (error) {
-				if (canReuseStoredFeed(process.argv.slice(2), store.keys().length)) {
+				const storedCount = store.keys().length;
+				if (canReuseStoredFeed(process.argv.slice(2), storedCount)) {
 					logger.warn(
-						`Could not reach the Zenn feed; using ${store.keys().length} previously loaded links: ${feedUrl}`,
+						`Could not reach the Zenn feed; using ${storedCount} previously loaded links: ${feedUrl}`,
 					);
 					return;
 				}
