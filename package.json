@@ -36,16 +36,16 @@
 		"sharp": "0.35.5"
 	},
 	"devDependencies": {
-		"@astrojs/check": "0.9.10",
+		"@astrojs/check": "0.9.11",
 		"@eslint/js": "10.0.1",
-		"@vitest/coverage-v8": "5.0.4",
-		"eslint": "10.12.0",
+		"@vitest/coverage-v8": "5.0.5",
+		"eslint": "10.13.0",
 		"eslint-plugin-astro": "3.2.1",
 		"markdownlint-cli2": "0.23.3",
 		"prettier": "3.9.10",
 		"prettier-plugin-astro": "1.1.1",
-		"typescript": "6.0.3",
-		"typescript-eslint": "8.71.2",
-		"vitest": "5.0.4"
+		"typescript": "7.0.2",
+		"typescript-eslint": "8.72.0",
+		"vitest": "5.0.5"
 	}
 }
