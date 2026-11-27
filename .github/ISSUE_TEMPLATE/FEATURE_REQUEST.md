@@ -21,7 +21,7 @@ about: Request a new feature or enhancement
 
 ## Requirements and Specifications
 
-- Describe the behaviour that needs to be implemented.
+- Describe the behavior that needs to be implemented.
 - Link to relevant references (e.g. Astro docs, design mockups) when available.
 - Details do not need to be final at first; please update as decisions are made.
 
